@@ -15,7 +15,7 @@ const handleShow= () => setShow(true);
 return (
   <>
     <Card id="card" style={{ width: "20rem" }}>
-      <Card.Img variant="top" src={props.data.poster_path} />
+      <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500${props.data.poster_path} `}/>
 
       <Card.Body id="body">
 
@@ -24,6 +24,7 @@ return (
           <Button variant="primary" onClick={handleShow}>
             Add to favorite list
           </Button>
+
 
       </Card.Body>
     </Card>

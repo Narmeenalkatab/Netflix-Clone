@@ -1,16 +1,20 @@
 import Movie from "../Movie/Movie";
 
-
-
-
-
 export default function MoviesList(props) {
 
+return(
+
 <>
-  <div id="card">
-    {props.data.map((i) => {
-      return <Movie data={i} />;
+    {props.data.map((data) => {
+      return (
+        <div id="card">
+          <Movie data={data} />
+        </div>
+      );
     })}
-  </div>
-</>;
+  </>
+
+)
+
+
 }

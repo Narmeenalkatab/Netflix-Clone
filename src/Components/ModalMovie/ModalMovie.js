@@ -1,51 +1,46 @@
 import { Modal } from "react-bootstrap";
-// import { Button } from "react-bootstrap/Button";
-import { useState } from "react";
-
-import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useState } from "react";
+
 
 export default function ModalMovie(props){
 
- const [comment, setComment] = useState(false);
- const handleComment = () => setComment(!Comment);
+const [showComment, setShowComment] = useState(false);
+const handleComment = () => setShowComment(!showComment);
 
-function commentState() {
-  return comment ? "Cancel comment" : "Add comment";
-}
-
-
-//   fetch("/addMovie", {
-//     method: "POST",
-//     headers: {
-//       "text": "application/json",
-//     },
-//     body: JSON.stringify({ movie, comment }),
-//   });
-
-
+  function commentState() {
+    return showComment ? "Cancel comment" : "Add comment";
+  }
 
 
  return (
    <>
      <Modal show={props.show} onHide={props.handleClose}>
        <Modal.Header closeButton>
-         <Modal.Title>{props.data.title}</Modal.Title>
+         <Modal.Title>Adding data to FAVpage</Modal.Title>
        </Modal.Header>
 
-       <img src={props.data.poster_path} alt={props.data.title} />
+       <img
+         src={`https://image.tmdb.org/t/p/w500${props.data.poster_path} `}
+         alt={props.data.title}
+       />
+
        <Modal.Body>{props.data.overview}</Modal.Body>
-
-
-
-       {Comment ?
-       <Form>
-       <Form.Group controlId="formComment"></Form.Group>
-       <Form.Label>Comment</Form.Label>
-       <Form.Control type="textarea" placeholder="Enter a comment here " value={comment}  />
-       </Form>
-       : null}
+       {showComment ? (
+         <Form id="form">
+           <Form.Group
+             className="mb-3"
+             controlId="exampleForm.ControlTextarea1"
+           >
+             <Form.Control
+               as="textarea"
+               rows={3}
+               placeholder="Add your comment here"
+             />
+           </Form.Group>
+         </Form>
+       ) : null}
 
        <Modal.Footer>
          <Button variant="secondary" onClick={props.handleClose}>

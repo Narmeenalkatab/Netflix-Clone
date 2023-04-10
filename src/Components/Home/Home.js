@@ -1,6 +1,5 @@
 import MoviesList from "../MovieList/MovieList";
 import { useEffect, useState } from "react";
-// require("dotenv").config();
 
 export default function Home(){
 
@@ -8,8 +7,9 @@ export default function Home(){
       const [trending, setTrending] = useState([]);
 
       async function getTrending() {
-         const url = process.env.REACT_APP_Trend_URL;
+        const url = process.env.REACT_APP_Trend_URL;
         const response = await fetch(`${url}/trending`);
+
         const trendingData = await response.json();
         setTrending(trendingData);
       }
