@@ -8,7 +8,7 @@ return(
     {props.data.map((data) => {
       return (
         <div id="card">
-          <Movie data={data} />
+          <Movie data={data} commentHandler={props.commentHandler} />
         </div>
       );
     })}

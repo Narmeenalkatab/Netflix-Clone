@@ -1,32 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-
-
+import { useRef } from "react";
+import Form from "react-bootstrap/Form";
 
 export default function FavList() {
 
 const [favorite, setFavorite] = useState([]);
+const updateRef = useRef();
 
  const  getFavorite = async () => {
-      const url = process.env.REACT_APP_Trend_URL;
-      await fetch(`${url}/trending`);
-        const response = await fetch(`${url}/favorite`, {
+        let url = `${process.env.REACT_APP_Trend_URL}/favList`;
+
+       let response = await fetch(url , {
           method: "GET",
         });
 
-       const dataFav = await response.json();
+       let dataFav = await response.json();
        setFavorite(dataFav);
     };
-useEffect(() => {
-  getFavorite();
-}, []);
 
+  function submitHandler(e, id, title, comments, poster_path) {
+    e.preventDefault();
+
+    if (updateRef.current) {
+      let NewComment = updateRef.current.value;
+
+      UpdateHandler(e, id, title, NewComment, poster_path);
+    } else {
+      console.log("null ");
+    }
+  }
 
 const handleDelete = async (id) => {
-  const url = process.env.REACT_APP_Trend_URL;
-  const response = await fetch(`${url}/deleteFavList${id}`, {
+  const url = `${process.env.REACT_APP_Trend_URL}/deletefavList${id}`;
+  const response = await fetch(url, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   if (response.status === 204) {
@@ -36,39 +48,41 @@ const handleDelete = async (id) => {
 
 
 useEffect(() => {
-    getFavorite();
-})
+  getFavorite();
+}, []);
 
 
+  async function UpdateHandler(e, id, title, newComment, poster_path) {
+    e.preventDefault();
 
- const handleUpdate = async (id, comment) => {
-     const url = process.env.REACT_APP_Trend_URL;
-   try {
+    let url = `${process.env.REACT_APP_Trend_URL}/UPDATE/${id}`;
 
-     await fetch(`${url}favorites/${id}`, {
-       method: "PUT",
-       body: JSON.stringify({ comment }),
-       headers: { "Content-Type": "application/json" },
-     });
-     setFavorite(
-       favorite.map((favorite) => {
-         if (favorite.id === id) {
-           return { ...favorite, comment };
-         }
-         return favorite;
-       })
-     );
-   } catch (error) {
-     console.error("Error updating favorite:", error);
-   }
- };
+    let data = {
+      title: title,
+      poster_path: poster_path,
+     comments: newComment,
+    };
 
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const receivedData = await response.json();
+
+    if (response.status === 200) {
+     getFavorite();
+    }
+  }
 
 
  return (
    <>
      <h1>Favorite List</h1>
-     <div className="card-container">
+     <div id="card-container">
        {
      favorite && favorite.map((data) => {
 
@@ -80,17 +94,37 @@ useEffect(() => {
             />
             <Card.Body>
               <Card.Title>{data.title}</Card.Title>
+              <Form>
+                <Form.Group className="form" controlId="formBasicEmail">
+                  <Form.Label>Update your comment</Form.Label>
+                  <Form.Control
+                    ref={updateRef}
+                    type="text"
+                    placeholder="Update your comment"
+                  />
+                 
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  onClick={(e) =>
+                    submitHandler(
+                      e,
+                      data.id,
+                      data.title,
+                      data.overviewandcomments,
+                      data.poster_path
+                    )
+                  }
+                >
+                  Update
+                </Button>
+              </Form>
               <Card.Text>Comment: {data.comment}</Card.Text>
-              <Button
-                variant="primary"
-                onClick={() => handleDelete(data.id)}
-              >
+              <Button variant="primary" onClick={() => handleDelete(data.id)}>
                 Delete
               </Button>
-              <Button
-                variant="primary"
-                onClick={() => handleUpdate(data.id, data.comment)}
-              >
+              <Button variant="primary" onClick={() => UpdateHandler(data.id)}>
                 Update
               </Button>
             </Card.Body>

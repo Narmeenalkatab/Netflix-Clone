@@ -1,6 +1,6 @@
 import MoviesList from "../MovieList/MovieList";
 import { useEffect, useState } from "react";
-
+// import ModalMovie from "../ModalMovie/ModalMovie";
 export default function Home(){
 
 
@@ -14,6 +14,18 @@ export default function Home(){
         setTrending(trendingData);
       }
 
+
+      function commentHandler(newtrending, id) {
+        trending.map((trending) => {
+          if (trending.id === id) {
+            trending.userComment = newtrending.userComment;
+            return trending;
+          } else {
+            return trending;
+          }
+        });
+      }
+
       useEffect(() => {
         getTrending();
       }, []);
@@ -21,7 +33,8 @@ export default function Home(){
 return (
   <>
     <h1>this is home page</h1>
-    <MoviesList data={trending} />
+    <MoviesList data={trending} commentHandler={commentHandler} />
+
   </>
 );
 

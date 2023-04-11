@@ -17,7 +17,7 @@ return (
       <Navbar.Toggle aria-controls="navbar" />
       <Navbar.Collapse id="navbar">
         <Nav className="nav1">
-          <Nav.Link as={Link} to="/favoritelist">
+          <Nav.Link as={Link} to="/favList">
             Favorite List
           </Nav.Link>
         </Nav>
